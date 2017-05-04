@@ -6,7 +6,7 @@ import org.opencv.core.Mat;
  * @author michal
  *
  */
-public class Interpolation {
+public final class Interpolation {
 	public static final int MAGNITUDE_DOUBLE = 2;
 	public static final int MAGNITUDE_QUADRUPLE = 4;
 	
@@ -282,4 +282,6 @@ public class Interpolation {
 		return new_image;
 	}
 	
+	private Interpolation() {
+	}
 }
