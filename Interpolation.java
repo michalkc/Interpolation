@@ -36,24 +36,13 @@ public final class Interpolation {
 				//get known pixels from image
 				/*****************************/
 				a = image.get(y, x);
-				if(x + 1 != image.width())
-					b = image.get(y,  x + 1); 
-				else 
-					b = null;
-				
-				if(y + 1 != image.width())
-					c = image.get(y + 1,  x);
-				else
-					c = null;
-				
-				if(b != null && c != null)
-					d = image.get(y + 1,  x + 1);
-				else 
-					d = null;
+				b = image.get(y,  x + 1); 
+				c = image.get(y + 1,  x);
+				d = image.get(y + 1,  x + 1);
 				/********************************/
 				double[] pix = new double[image.channels()];
-				if(b != null){ //check if we aren't on the edge of image
-					for (int k = 0; k < magnitude; ++k){ //for subpixels created from a pixel
+				for (int k = 0; k < magnitude; ++k){ //for subpixels created from a pixel
+					if(b != null){ //check if we aren't on the edge of image
 						for (int l = 0; l < magnitude; ++l){ 
 							double w = l/magnitude;
 							double h = k/magnitude;
@@ -70,9 +59,16 @@ public final class Interpolation {
 							new_image.put(y*magnitude + k,  x*magnitude + l,  pix);
 						}
 					}
-				}
-				else{
-					new_image.put(y*magnitude,  x*magnitude, a);
+					else{
+						double h = k/magnitude;
+						if(c != null){
+							for (int i = 0; i < image.channels(); ++i){ //for all colors
+								pix[i] = a[i] +  h*(c[i]);
+							}
+						}
+						new_image.put(y*magnitude + k,  x*magnitude,  pix);
+						//new_image.put(y*magnitude,  x*magnitude, a);
+					}
 				}
 			}	
 		}
